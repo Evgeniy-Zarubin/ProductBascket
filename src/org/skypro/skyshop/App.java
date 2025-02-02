@@ -38,10 +38,17 @@ public class App {
         boolean hasAppleInEmpty = basket.equalsProductName("Яблоки");
         System.out.println("Есть ли яблоки в пустой корзине? " + hasAppleInEmpty);
 
+        //Заполняем корзину заново
+        basket.addProduct(bread);
+        basket.addProduct(apples);
         basket.addProduct(meat);
         basket.addProduct(cheese);
         basket.addProduct(butter);
+        System.out.println("------------------Добавляем 6ой продукт------------------------");
         basket.addProduct(new Product("Сахар", 80));
+
+        System.out.println("------------------Выводим новую корзину------------------------");
+        basket.printAllProducts();
 
     }
 }
