@@ -18,9 +18,12 @@ public class ProductBasket {
 
     public double getTotalCost() {
         double totalCost = 0;
-        for (int i = 0; i < countProducts; i++) {
-            totalCost += products[i].getPrice();
+            for (Product pr : products) {
+                if (pr != null) {
+                totalCost += pr.getPrice();
+            }
         }
+
         return totalCost;
     }
 
