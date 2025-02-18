@@ -1,16 +1,20 @@
 package org.skypro.skyshop;
 
 import org.skypro.skyshop.basket.ProductBasket;
+import org.skypro.skyshop.product.DiscountedProduct;
+import org.skypro.skyshop.product.FixPriceProduct;
 import org.skypro.skyshop.product.Product;
+import org.skypro.skyshop.product.SimpleProduct;
 
 public class App {
     public static void main(String[] args) {
-        Product milk = new Product("Молоко", 50.78);
-        Product bread = new Product("Хлеб", 30.20);
-        Product apples = new Product("Яблоки", 100);
-        Product meat = new Product("Мясо", 300.22);
-        Product cheese = new Product("Сыр", 200.3);
-        Product butter = new Product("Масло", 150.83);
+        Product milk = new SimpleProduct("Молоко", 50.78);
+        Product bread = new SimpleProduct("Хлеб", 30.20);
+        Product apples = new SimpleProduct("Яблоки", 100);
+        Product meat = new SimpleProduct("Мясо", 300.22);
+        Product cheese = new SimpleProduct("Сыр", 200.3);
+        Product butter = new SimpleProduct("Масло", 150.83);
+
 
         ProductBasket basket = new ProductBasket();
 
@@ -45,10 +49,20 @@ public class App {
         basket.addProduct(cheese);
         basket.addProduct(butter);
         System.out.println("------------------Добавляем 6ой продукт------------------------");
-        basket.addProduct(new Product("Сахар", 80));
+        basket.addProduct(new SimpleProduct("Сахар", 80));
 
         System.out.println("------------------Выводим новую корзину------------------------");
         basket.printAllProducts();
+        basket.clear();
+        Product gamePad = new SimpleProduct("Геймпад", 8900);
+        Product noteBook = new DiscountedProduct("Ноутбук Acer", 120000, 15);
+        Product ssdM2 = new FixPriceProduct("Накопитель SSD M2");
+        basket.addProduct(gamePad);
+        basket.addProduct(noteBook);
+        basket.addProduct(ssdM2);
+        basket.printContent();
+
+
 
     }
 }
