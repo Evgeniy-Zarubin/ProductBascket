@@ -1,5 +1,8 @@
 package org.skypro.skyshop;
 
+import org.skypro.skyshop.Article.Article;
+import org.skypro.skyshop.Article.SearchEngine;
+import org.skypro.skyshop.Article.Searchable;
 import org.skypro.skyshop.basket.ProductBasket;
 import org.skypro.skyshop.product.DiscountedProduct;
 import org.skypro.skyshop.product.FixPriceProduct;
@@ -54,6 +57,8 @@ public class App {
         System.out.println("------------------Выводим новую корзину------------------------");
         basket.printAllProducts();
         basket.clear();
+
+        //Наследование
         Product gamePad = new SimpleProduct("Геймпад", 8900);
         Product noteBook = new DiscountedProduct("Ноутбук Acer", 120000, 15);
         Product ssdM2 = new FixPriceProduct("Накопитель SSD M2");
@@ -61,7 +66,39 @@ public class App {
         basket.addProduct(noteBook);
         basket.addProduct(ssdM2);
         basket.printContent();
+        basket.clear();
 
+        //Интерфейсы
+        SearchEngine searchEngine = new SearchEngine(10);
+        Searchable searchable = new Product("Наушники");
+        Product gamePad1 = new SimpleProduct("Геймпад", 8900);
+        Product noteBook1 = new DiscountedProduct("Ноутбук Acer", 120000, 15);
+        Product ssdM22 = new FixPriceProduct("SSD M2");
+        Article articleGamePad = new Article("Информация о Геймпаде", "Функциональные характеристики геймпада");
+        Article articleNoteBook = new Article("Информация о Ноутбуке", "Функциональные характеристики ноутбука");
+
+        searchEngine.add(gamePad1);
+        searchEngine.add(noteBook1);
+        searchEngine.add(ssdM22);
+        searchEngine.add(articleGamePad);
+        searchEngine.add(articleNoteBook);
+
+        System.out.println("Ищем результат по Геймпаду");
+        searchEngine.search("Геймпад");
+        System.out.println("Ищем результат по Наушникам");
+        searchEngine.search("Информация о Масле");
+
+        System.out.println("Информация по продукту:");
+        System.out.println("Имя: " + searchable.getName());
+        System.out.println("Тип контента: " + searchable.getContentType());
+        System.out.println("Поисковый термин: " + searchable.getSearchTerm());
+        System.out.println("Представление - " + searchable.getStringRepresentation());
+
+        System.out.println("Информация о статье:");
+        System.out.println("Имя: " + articleGamePad.getName());
+        System.out.println("Тип контента: " + articleGamePad.getContentType());
+        System.out.println("Поисковый термин: " + articleGamePad.getSearchTerm());
+        System.out.println("Представление - " + articleGamePad.getStringRepresentation());
 
 
     }
