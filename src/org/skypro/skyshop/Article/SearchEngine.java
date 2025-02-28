@@ -1,5 +1,7 @@
 package org.skypro.skyshop.Article;
 
+import org.skypro.skyshop.product.BestResultNotFound;
+
 import java.util.Arrays;
 
 public class SearchEngine {
@@ -45,6 +47,41 @@ public class SearchEngine {
             }
         }
        return resultTrimmed;
+    }
+
+    public Searchable findBestMatch (String search) throws BestResultNotFound {
+         if (searchableItems == null || search == null || search.isEmpty()) {
+            throw new BestResultNotFound("Поисковая строка пуста или список объектов пуст");
+        }
+        Searchable bestMatch = null;
+        int maxOccurrences = 0;
+
+        for (Searchable item : searchableItems) {
+            if (item != null){
+                int occurrences = countOccurrences(item.getSearchTerm(),search);
+                if (occurrences > maxOccurrences) {
+                    maxOccurrences = occurrences;
+                    bestMatch = item;
+                }
+
+            }
+        }
+
+        if (bestMatch == null) {
+            throw new BestResultNotFound("Не найдено совпадений для строки '" + search + "'");
+        }
+        return bestMatch;
+
+    }
+
+    private int countOccurrences (String text, String search) {
+        int index = 0;
+        int count = 0;
+        while ((index = text.indexOf(search, index)) != -1) {
+            count++;
+            index += search.length();
+        }
+        return count;
     }
 
 }
