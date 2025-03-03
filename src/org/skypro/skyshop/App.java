@@ -65,7 +65,7 @@ public class App {
         System.out.println("Ищем результат по Геймпаду");
         searchEngine.search("Геймпад");
         System.out.println("Ищем результат по Наушникам");
-        searchEngine.search("Яблоко");
+        searchEngine.search("Наушники");
 
         System.out.println("Информация по продукту:");
         System.out.println("Имя: " + searchable.getName());
@@ -95,7 +95,7 @@ public class App {
         List<Product> removedList = basket.removeProductByName("SSD M2");
         System.out.println("Список удалённых товаров: " + removedList);
 
-        basket.printBasket();
+        basket.printBaсket();
         basket.clearRemovedList(removedList);
         basket.checkRemovedList(removedList);
 

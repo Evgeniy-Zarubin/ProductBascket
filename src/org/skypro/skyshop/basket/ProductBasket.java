@@ -9,11 +9,9 @@ import org.skypro.skyshop.product.Product;
 
 public class ProductBasket {
     private final List<Product> products = new ArrayList<>();
-    private int countProducts = 0;
 
     public void addProduct(Product product) {
         this.products.add(product);
-        this.countProducts++;
     }
 
     public double getTotalCost() {
@@ -28,28 +26,26 @@ public class ProductBasket {
     }
 
     public void clear() {
-        for (int i = 0; i < products.size(); ) {
-            products.remove(i);
+        for (Product product : products) {
+            products.remove(product);
         }
-        countProducts = 0;
     }
-
 
     public void printAllProducts() {
         if (products.isEmpty()) {
             System.out.println("в корзине пусто");
         } else {
-            for (int i = 0; i < countProducts; i++) {
-                Product product = products.get(i);
+            for (Product product : products) {
                 System.out.println("Продукт: " + product.getName() + " Цена: " + product.getPrice());
+
             }
             System.out.println("Итого: " + getTotalCost());
         }
     }
 
     public boolean equalsProductName(String name) {
-        for (int i = 0; i < countProducts; ++i) {
-            if (products.get(i).getName().equals(name)) {
+        for (Product product : products) {
+            if (product.getName().equals(name)) {
                 return true;
             }
         }
@@ -65,7 +61,6 @@ public class ProductBasket {
             if (currentProduct.getName().equals(name)) {
                 removedProducts.add(currentProduct);
                 iterator.remove();
-                countProducts--;
             }
         }
         return removedProducts;
@@ -91,7 +86,7 @@ public class ProductBasket {
     }
 
 
-    public void printBasket() {
+    public void printBaсket() {
         System.out.println("Текущие товары в корзине:");
         System.out.println(products);
     }
