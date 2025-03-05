@@ -1,29 +1,34 @@
 package org.skypro.skyshop.Article;
 
 import org.skypro.skyshop.product.BestResultNotFound;
+import org.skypro.skyshop.product.Product;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class SearchEngine {
-    private final List<Searchable> searchableItems;
+    private final TreeMap<String, List<Searchable>> searchableItems;
 
     public SearchEngine() {
-       searchableItems = new ArrayList<>();
+       searchableItems = new TreeMap<>();
     }
 
     public void add(Searchable item) {
-        searchableItems.add(item);
+        String name = item.getName();
+        if (!searchableItems.containsKey(name)) {
+            searchableItems.put(name, new ArrayList<>());
+        }
+        searchableItems.get(name).add(item);
     }
 
-    public List<Searchable> search(String searchTerm) {
-        List<Searchable> result = new ArrayList<>();
+    public TreeMap<String, List<Searchable>> search(String searchTerm) {
+        TreeMap<String, List<Searchable>> result = new TreeMap<>();
 
-        for (Searchable item : searchableItems) {
-            if (item.getSearchTerm().contains(searchTerm)) {
-                result.add(item);
-                System.out.println(item.getStringRepresentation());
+        for (List<Searchable> item : searchableItems.values()){
+            for (Searchable sit : item) {
+                if (sit.getSearchTerm().contains(searchTerm)) {
+                    result.put(sit.getName(), new ArrayList<>());
+                    System.out.println(sit.getStringRepresentation());
+                }
             }
         }
         return result;
@@ -36,16 +41,16 @@ public class SearchEngine {
         Searchable bestMatch = null;
         int maxOccurrences = 0;
 
-        for (Searchable item : searchableItems) {
-            if (item != null){
+        for (List<Searchable> sit : searchableItems.values()){
+            for (Searchable item : sit) {
                 int occurrences = countOccurrences(item.getSearchTerm(),search);
                 if (occurrences > maxOccurrences) {
                     maxOccurrences = occurrences;
                     bestMatch = item;
                 }
-
             }
         }
+
 
         if (bestMatch == null) {
             throw new BestResultNotFound("Не найдено совпадений для строки '" + search + "'");

@@ -95,7 +95,7 @@ public class App {
         List<Product> removedList = basket.removeProductByName("SSD M2");
         System.out.println("Список удалённых товаров: " + removedList);
 
-        basket.printBaсket();
+        basket.printBuсket();
         basket.clearRemovedList(removedList);
         basket.checkRemovedList(removedList);
 
