@@ -6,33 +6,37 @@ import org.skypro.skyshop.product.Product;
 import java.util.*;
 
 public class SearchEngine {
-    private final TreeMap<String, List<Searchable>> searchableItems;
+    private final Set<Searchable> searchableItems;
 
     public SearchEngine() {
-        searchableItems = new TreeMap<>();
+        searchableItems = new HashSet<>();
     }
-
 
     public void add(Searchable item) {
-        String name = item.getName();
-        if (!searchableItems.containsKey(name)) {
-            searchableItems.put(name, new ArrayList<>());
-        }
-        searchableItems.get(name).add(item);
+        searchableItems.add(item);
     }
 
-    public TreeMap<String, Searchable> search(String searchTerm) {
-        TreeMap<String, Searchable> result = new TreeMap<>();
+    public TreeSet<Searchable> search(String searchTerm) {
+        TreeSet<Searchable> result = new TreeSet<>(new SearchableComparator());
 
-        for (List<Searchable> item : searchableItems.values()) {
-            for (Searchable sit : item) {
-                if (sit.getSearchTerm().contains(searchTerm)) {
-                    result.put(sit.getName(), sit);
-                    System.out.println(sit.getStringRepresentation());
+        for (Searchable item : searchableItems) {
+                if (item.getSearchTerm().contains(searchTerm)) {
+                    result.add(item);
+                    System.out.println(item.getStringRepresentation());
                 }
-            }
         }
         return result;
+    }
+
+    private static class SearchableComparator implements Comparator<Searchable> {
+        @Override
+        public int compare(Searchable o1, Searchable o2) {
+            int lengthComparison = Integer.compare(o2.getName().length(), o1.getName().length());
+            if (lengthComparison != 0) {
+                return lengthComparison;
+            }
+            return o1.getName().compareTo(o2.getName());
+        }
     }
 
     public Searchable findBestMatch(String search) throws BestResultNotFound {
@@ -42,13 +46,11 @@ public class SearchEngine {
         Searchable bestMatch = null;
         int maxOccurrences = 0;
 
-        for (List<Searchable> sit : searchableItems.values()) {
-            for (Searchable item : sit) {
-                int occurrences = countOccurrences(item.getSearchTerm(), search);
+        for (Searchable sit : searchableItems) {
+                int occurrences = countOccurrences(sit.getSearchTerm(), search);
                 if (occurrences > maxOccurrences) {
                     maxOccurrences = occurrences;
-                    bestMatch = item;
-                }
+                    bestMatch = sit;
             }
         }
 
