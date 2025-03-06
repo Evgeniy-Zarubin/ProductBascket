@@ -16,7 +16,7 @@ public class SearchEngine {
         searchableItems.add(item);
     }
 
-    public TreeSet<Searchable> search(String searchTerm) {
+    public Set<Searchable> search(String searchTerm) {
         TreeSet<Searchable> result = new TreeSet<>(new SearchableComparator());
 
         for (Searchable item : searchableItems) {
@@ -26,17 +26,6 @@ public class SearchEngine {
                 }
         }
         return result;
-    }
-
-    private static class SearchableComparator implements Comparator<Searchable> {
-        @Override
-        public int compare(Searchable o1, Searchable o2) {
-            int lengthComparison = Integer.compare(o2.getName().length(), o1.getName().length());
-            if (lengthComparison != 0) {
-                return lengthComparison;
-            }
-            return o1.getName().compareTo(o2.getName());
-        }
     }
 
     public Searchable findBestMatch(String search) throws BestResultNotFound {

@@ -99,6 +99,5 @@ public class App {
         basket.clearRemovedList(removedList);
         basket.checkRemovedList(removedList);
 
-        
     }
 }
