@@ -9,7 +9,7 @@ public class SearchEngine {
     private final TreeMap<String, List<Searchable>> searchableItems;
 
     public SearchEngine() {
-       searchableItems = new TreeMap<>();
+        searchableItems = new TreeMap<>();
     }
 
     public void add(Searchable item) {
@@ -20,13 +20,13 @@ public class SearchEngine {
         searchableItems.get(name).add(item);
     }
 
-    public TreeMap<String, List<Searchable>> search(String searchTerm) {
-        TreeMap<String, List<Searchable>> result = new TreeMap<>();
+    public TreeMap<String, Searchable> search(String searchTerm) {
+        TreeMap<String, Searchable> result = new TreeMap<>();
 
-        for (List<Searchable> item : searchableItems.values()){
+        for (List<Searchable> item : searchableItems.values()) {
             for (Searchable sit : item) {
                 if (sit.getSearchTerm().contains(searchTerm)) {
-                    result.put(sit.getName(), new ArrayList<>());
+                    result.put(sit.getName(), sit);
                     System.out.println(sit.getStringRepresentation());
                 }
             }
@@ -34,16 +34,16 @@ public class SearchEngine {
         return result;
     }
 
-    public Searchable findBestMatch (String search) throws BestResultNotFound {
-         if (searchableItems.isEmpty() || search == null || search.isEmpty()) {
+    public Searchable findBestMatch(String search) throws BestResultNotFound {
+        if (searchableItems.isEmpty() || search == null || search.isEmpty()) {
             throw new BestResultNotFound("Поисковая строка пуста или список объектов пуст");
         }
         Searchable bestMatch = null;
         int maxOccurrences = 0;
 
-        for (List<Searchable> sit : searchableItems.values()){
+        for (List<Searchable> sit : searchableItems.values()) {
             for (Searchable item : sit) {
-                int occurrences = countOccurrences(item.getSearchTerm(),search);
+                int occurrences = countOccurrences(item.getSearchTerm(), search);
                 if (occurrences > maxOccurrences) {
                     maxOccurrences = occurrences;
                     bestMatch = item;
@@ -59,12 +59,16 @@ public class SearchEngine {
 
     }
 
-    private int countOccurrences (String text, String search) {
+    private int countOccurrences(String text, String search) {
         int index = 0;
         int count = 0;
-        while ((index = text.indexOf(search, index)) != -1) {
-            count++;
-            index += search.length();
+        if (text == null) {
+            return 0;
+        } else {
+            while ((index = text.indexOf(search, index)) != -1) {
+                count++;
+                index += search.length();
+            }
         }
         return count;
     }
