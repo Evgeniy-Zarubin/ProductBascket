@@ -12,6 +12,7 @@ public class SearchEngine {
         searchableItems = new TreeMap<>();
     }
 
+
     public void add(Searchable item) {
         String name = item.getName();
         if (!searchableItems.containsKey(name)) {
