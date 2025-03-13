@@ -91,13 +91,13 @@ public class App {
             System.err.println(e.getMessage());
         }
 
-
         List<Product> removedList = basket.removeProductByName("SSD M2");
         System.out.println("Список удалённых товаров: " + removedList);
 
         basket.printBuсket();
         basket.clearRemovedList(removedList);
         basket.checkRemovedList(removedList);
-
+        basket.getTotalCost();
+        basket.printContent();
     }
 }

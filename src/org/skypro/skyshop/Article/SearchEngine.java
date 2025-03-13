@@ -4,6 +4,8 @@ import org.skypro.skyshop.product.BestResultNotFound;
 import org.skypro.skyshop.product.Product;
 
 import java.util.*;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public class SearchEngine {
     private final Set<Searchable> searchableItems;
@@ -17,15 +19,12 @@ public class SearchEngine {
     }
 
     public Set<Searchable> search(String searchTerm) {
-        TreeSet<Searchable> result = new TreeSet<>(new SearchableComparator());
+        Supplier<TreeSet<Searchable>> supplier = () -> new TreeSet<>(new SearchableComparator());
 
-        for (Searchable item : searchableItems) {
-                if (item.getSearchTerm().contains(searchTerm)) {
-                    result.add(item);
-                    System.out.println(item.getStringRepresentation());
-                }
-        }
-        return result;
+        return searchableItems.stream()
+                .filter(item -> item.getSearchTerm().contains(searchTerm))
+                .peek(item -> System.out.println(item.getStringRepresentation()))
+                .collect(Collectors.toCollection(supplier));
     }
 
     public Searchable findBestMatch(String search) throws BestResultNotFound {
@@ -36,19 +35,17 @@ public class SearchEngine {
         int maxOccurrences = 0;
 
         for (Searchable sit : searchableItems) {
-                int occurrences = countOccurrences(sit.getSearchTerm(), search);
-                if (occurrences > maxOccurrences) {
-                    maxOccurrences = occurrences;
-                    bestMatch = sit;
+            int occurrences = countOccurrences(sit.getSearchTerm(), search);
+            if (occurrences > maxOccurrences) {
+                maxOccurrences = occurrences;
+                bestMatch = sit;
             }
         }
-
 
         if (bestMatch == null) {
             throw new BestResultNotFound("Не найдено совпадений для строки '" + search + "'");
         }
         return bestMatch;
-
     }
 
     private int countOccurrences(String text, String search) {

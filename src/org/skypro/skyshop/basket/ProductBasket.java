@@ -17,14 +17,10 @@ public class ProductBasket {
     }
 
     public double getTotalCost() {
-        double totalCost = 0;
-        for (List<Product> product : products.values()) {
-            for(Product pr : product) {
-                totalCost += pr.getPrice();
-            }
-        }
-
-        return totalCost;
+        return products.values().stream()
+                .flatMap(Collection::stream)
+                .mapToDouble(Product::getPrice)
+                .sum();
     }
 
     public void clear() {
@@ -62,20 +58,17 @@ public class ProductBasket {
 
     public void printContent() {
         System.out.println("Ваша корзина:");
-        double totalCost = 0;
-        int specialCount = 0;
 
-        for(List<Product> product : products.values()) {
-            for (Product pr : product) {
-                if (pr != null) {
-                    System.out.println(pr);
-                    totalCost += pr.getPrice();
-                }
-                if (pr != null && pr.isSpecial()) {
-                    specialCount++;
-                }
-            }
-        }
+        double totalCost = getTotalCost();
+        long specialCount = getSpecialCount();
+
+        products.values().stream()
+                .flatMap(Collection::stream)
+                .forEach(product -> {
+                    if (product != null) {
+                        System.out.println(product);
+                    }
+                });
         System.out.println("Итого стоимость корзины равна: " + totalCost);
         System.out.println("Специальных товаров в корзине: " + specialCount);
     }
@@ -87,15 +80,21 @@ public class ProductBasket {
     }
 
     public void checkRemovedList(List<Product> removedList) {
-        if (removedList.isEmpty()){
+        if (removedList.isEmpty()) {
             System.out.println("Список удалённых товаров пуст");
         } else {
             System.out.println("Удалённые товары: " + removedList);
         }
     }
 
-    public void clearRemovedList (List<Product> removedList) {
-             removedList.clear();
+    public void clearRemovedList(List<Product> removedList) {
+        removedList.clear();
     }
 
+    private long getSpecialCount() {
+        return products.values().stream()
+                .flatMap(Collection::stream)
+                .filter(Product::isSpecial)
+                .count();
+    }
 }
